@@ -2,9 +2,12 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  if (request.url.startsWith('/about')) {
+  if (
+    !request.url.includes('next-rewrites-theta.vercel.app') ||
+    request.url.includes('/about') ||
+    request.url.includes('_next')
+  ) {
     return NextResponse.next();
   }
-
-  return NextResponse.redirect(new URL('/about', request.url));
+  return NextResponse.rewrite(new URL('/about', request.url));
 }
